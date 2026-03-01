@@ -8,7 +8,7 @@ function clamp(value: number, min = 0, max = 100) {
 }
 
 /**
- * 학기별 가중치 평균 계산 (2026 입시 가산점 로직 포함)
+ * 학기별 가중치 평균 계산 (2026 입시 로직 반영)
  */
 function semesterWeightedAvg(user: UserScore, semesterWeights: number[] = []) {
   const subjects: Subject[] = SUBJECTS;
@@ -37,7 +37,7 @@ function semesterWeightedAvg(user: UserScore, semesterWeights: number[] = []) {
     subjects.forEach((sub) => {
       let score = (sem as any)[sub] ?? 0;
       
-      // ✅ 2026 입시 트렌드: 과목별 가산/감점 로직
+      // 2026 입시 가산점/감점 로직
       if (sub === "math" || sub === "science") {
         if (score >= 90) score += 2;
       }
@@ -107,10 +107,9 @@ function levelFromFinalScore(finalScore: number, cutline?: number, difficulty?: 
 }
 
 /**
- * 특정 학교에 대한 최종 성적 계산
+ * 학교별 최종 계산 및 프론트엔드용 데이터 생성
  */
 export function calculateForSchool(school: School, userScore: UserScore) {
-  // 🔥 타입 에러 방지를 위해 school을 any로 우회
   const sObj = school as any;
 
   const semesterWeights = sObj.gradeWeights?.semesterWeights ?? [];
@@ -122,11 +121,8 @@ export function calculateForSchool(school: School, userScore: UserScore) {
   );
   
   const normalized = normalizeTo100(weightedSum, weightSum);
-  
-  // ✅ School 타입에 없어도 any 우회로 에러 없이 실행됨
   const mode = sObj.difficultyMode ?? "add";
   const afterDifficulty = applyDifficulty(normalized, sObj.difficulty, mode as "add" | "mul");
-  
   const spreadValue = typeof sObj.spread === "number" && sObj.spread > 0 ? sObj.spread : 6;
   
   let prob = sObj.cutline != null 
@@ -134,14 +130,21 @@ export function calculateForSchool(school: School, userScore: UserScore) {
     : probabilityFromScore(afterDifficulty);
     
   if (typeof prob !== "number" || isNaN(prob)) prob = 0;
-  
   const finalScore = Math.round(afterDifficulty * 10) / 10;
+
+  // ✅ 프론트엔드 차트 에러 방지를 위한 색상 정의
+  const getLevelColor = (p: number) => {
+    if (p >= 0.7) return "#10B981"; // 초록
+    if (p >= 0.4) return "#F59E0B"; // 주황
+    return "#EF4444";              // 빨강
+  };
   
   return {
     schoolId: sObj.id,
     finalScore,
     probability: prob,
     level: levelFromFinalScore(finalScore, sObj.cutline, sObj.difficulty, spreadValue) as any,
+    color: getLevelColor(prob), // 🔥 핵심: 이 필드가 있어야 'reading color' 에러가 안 납니다.
   };
 }
 
