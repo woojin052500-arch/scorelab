@@ -4,7 +4,7 @@ import { School, UserScore, CalculationResult } from '../types/index';
 const SUBJECTS = ['korean', 'math', 'english', 'science', 'social'] as const;
 
 export function semesterWeightedAvg(user: UserScore, semesterWeights: number[] = []) { // ✅ 여기 [] 확인!
-  const sums: Record<string, number> = {};
+  const sums: Record<string, number> = [];
   SUBJECTS.forEach((s) => (sums[s] = 0));
   let totalWeight = 0;
 
