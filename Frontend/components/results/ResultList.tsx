@@ -5,6 +5,8 @@ import { CalculateResponse, School } from "@/types";
 import { ResultCard } from "./ResultCard";
 
 type SortKey = "finalScore" | "probability";
+// ✅ "특성화고"와 "영재학교" 타입을 추가합니다.
+type SchoolType = "전체" | "영재학교" | "과학고" | "외고" | "특성화고";
 
 type Props = {
   results: CalculateResponse;
@@ -14,7 +16,7 @@ type Props = {
 
 export function ResultList({ results, schools, onReset }: Props) {
   const [sortKey, setSortKey] = useState<SortKey>("finalScore");
-  const [typeFilter, setTypeFilter] = useState<"전체" | "과학고" | "외고">("전체");
+  const [typeFilter, setTypeFilter] = useState<SchoolType>("전체");
 
   const schoolMap = new Map(schools.map((s) => [s.id, s]));
 
@@ -30,8 +32,9 @@ export function ResultList({ results, schools, onReset }: Props) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div className="flex gap-2">
-          {(["전체", "과학고", "외고"] as const).map((t) => (
+        <div className="flex flex-wrap gap-2">
+          {/* ✅ 버튼 목록에 "영재학교"와 "특성화고"를 추가하여 클릭 가능하게 만듭니다. */}
+          {(["전체", "영재학교", "과학고", "외고", "특성화고"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTypeFilter(t)}
@@ -60,7 +63,8 @@ export function ResultList({ results, schools, onReset }: Props) {
 
       <div className="space-y-4">
         {filtered.length === 0 ? (
-          <div className="text-center py-16 text-neutral-500 text-lg">결과가 없습니다.
+          <div className="text-center py-16 text-neutral-500 text-lg">
+            결과가 없습니다.
             <button
               className="block mx-auto mt-6 px-6 py-2 rounded-lg bg-neutral-800 text-neutral-100 font-semibold hover:bg-neutral-700 transition border border-neutral-700"
               onClick={onReset}
