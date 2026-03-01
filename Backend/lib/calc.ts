@@ -48,4 +48,4 @@ export function calculateForSchool(school: School, user: UserScore, options?: an
   };
 }
 
-export default { calculateForSchool };git rm -r --cached .
+export default { calculateForSchool };

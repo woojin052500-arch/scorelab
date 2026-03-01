@@ -6,7 +6,7 @@ function clamp(value: number, min = 0, max = 100) {
   return Math.max(min, Math.min(max, value));
 }
 
-function semesterWeightedAvg(user: UserScore, semesterWeights: number[] = {}) {
+function semesterWeightedAvg(user: UserScore, semesterWeights: number[] = []) {
   const subjects: Subject[] = SUBJECTS;
   const sums: Record<string, number> = {};
   subjects.forEach((s) => (sums[s] = 0));
