@@ -21,10 +21,10 @@ export type School = {
   subjectWeights: SubjectWeights;
   gradeWeights: GradeWeights;
   cutline?: number;
-  difficulty?: number; // 중복 제거 완료
+  difficulty?: number; // ✅ 중복 제거됨
   difficultyMode?: 'add' | 'mul';
   spread?: number;
-}; // 중괄호 닫기 완료
+}; // ✅ 괄호 닫힘
 
 export type UserScore = {
   semesters: {
@@ -42,5 +42,3 @@ export type CalculationResult = {
   probability: number | null;
   level: string;
 };
-
-export type CalculateResponse = CalculationResult[];
