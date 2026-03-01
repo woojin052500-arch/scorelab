@@ -1,0 +1,440 @@
+[
+  {
+    "id": "ksa",
+    "name": "한국과학영재학교",
+    "type": "영재학교",
+    "location": "부산",
+    "studentCount": "360명",
+    "history": "1991년 개교",
+    "description": "KAIST 부설 전국 단위 선발 영재학교",
+    "subjectWeights": {
+      "korean": 0.5,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.3
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 94,
+    "difficulty": 3
+  },
+  {
+    "id": "sshs",
+    "name": "서울과학고등학교",
+    "type": "영재학교",
+    "location": "서울",
+    "studentCount": "360명",
+    "history": "1989년 개교",
+    "description": "국내 최상위 이공계 영재학교",
+    "subjectWeights": {
+      "korean": 0.7,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 93,
+    "difficulty": 3
+  },
+  {
+    "id": "dgsh",
+    "name": "대구과학고등학교",
+    "type": "영재학교",
+    "location": "대구",
+    "studentCount": "360명",
+    "history": "1988년 개교",
+    "description": "영남권 대표 영재학교",
+    "subjectWeights": {
+      "korean": 0.5,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.3
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 92,
+    "difficulty": 3
+  },
+  {
+    "id": "ggsh",
+    "name": "경기과학고등학교",
+    "type": "영재학교",
+    "location": "경기",
+    "studentCount": "360명",
+    "history": "1983년 개교",
+    "description": "수도권 과학영재 특화 교육기관",
+    "subjectWeights": {
+      "korean": 0.5,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.3
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 92,
+    "difficulty": 3
+  },
+  {
+    "id": "djsh",
+    "name": "대전과학고등학교",
+    "type": "영재학교",
+    "location": "대전",
+    "studentCount": "360명",
+    "history": "1984년 개교",
+    "description": "KAIST 인접 연구 중심 교육",
+    "subjectWeights": {
+      "korean": 0.5,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.3
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 91,
+    "difficulty": 3
+  },
+  {
+    "id": "gjsh",
+    "name": "광주과학고등학교",
+    "type": "영재학교",
+    "location": "광주",
+    "studentCount": "360명",
+    "history": "1983년 개교",
+    "description": "호남권 과학영재 육성 기관",
+    "subjectWeights": {
+      "korean": 0.5,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.3
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 90,
+    "difficulty": 3
+  },
+  {
+    "id": "ince-gifted",
+    "name": "인천과학예술영재학교",
+    "type": "영재학교",
+    "location": "인천",
+    "studentCount": "360명",
+    "history": "2016년 개교",
+    "description": "과학·예술 융합형 영재학교",
+    "subjectWeights": {
+      "korean": 0.7,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 90,
+    "difficulty": 3
+  },
+  {
+    "id": "hsh",
+    "name": "한성과학고등학교",
+    "type": "과학고",
+    "location": "서울",
+    "studentCount": "240명",
+    "history": "1992년 개교",
+    "description": "서울 지역 과학중점 교육",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 89,
+    "difficulty": 2
+  },
+  {
+    "id": "sjsh",
+    "name": "세종과학고등학교",
+    "type": "과학고",
+    "location": "서울",
+    "studentCount": "240명",
+    "history": "2008년 개교",
+    "description": "서울 남부권 과학특화 고교",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 88,
+    "difficulty": 2
+  },
+
+  {
+    "id": "bs-sh",
+    "name": "부산과학고등학교",
+    "type": "과학고",
+    "location": "부산",
+    "studentCount": "240명",
+    "history": "1985년 개교",
+    "description": "부산 지역 과학영재 양성",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 87,
+    "difficulty": 2
+  },
+  {
+    "id": "ulsan-sh",
+    "name": "울산과학고등학교",
+    "type": "과학고",
+    "location": "울산",
+    "studentCount": "240명",
+    "history": "1997년 개교",
+    "description": "울산 지역 과학특화 고교",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 86,
+    "difficulty": 2
+  },
+  {
+    "id": "gangwon-sh",
+    "name": "강원과학고등학교",
+    "type": "과학고",
+    "location": "강원",
+    "studentCount": "180명",
+    "history": "1994년 개교",
+    "description": "강원권 과학인재 육성",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 85,
+    "difficulty": 2
+  },
+  {
+    "id": "ggbuk-sh",
+    "name": "경기북과학고등학교",
+    "type": "과학고",
+    "location": "경기",
+    "studentCount": "240명",
+    "history": "2005년 개교",
+    "description": "경기 북부 과학특화",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 88,
+    "difficulty": 2
+  },
+  {
+    "id": "cb-sh",
+    "name": "충북과학고등학교",
+    "type": "과학고",
+    "location": "충북",
+    "studentCount": "180명",
+    "history": "1993년 개교",
+    "description": "충북권 과학영재 육성",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 85,
+    "difficulty": 2
+  },
+  {
+    "id": "cn-sh",
+    "name": "충남과학고등학교",
+    "type": "과학고",
+    "location": "충남",
+    "studentCount": "180명",
+    "history": "1992년 개교",
+    "description": "충남권 과학중점",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 85,
+    "difficulty": 2
+  },
+  {
+    "id": "jn-sh",
+    "name": "전남과학고등학교",
+    "type": "과학고",
+    "location": "전남",
+    "studentCount": "180명",
+    "history": "1993년 개교",
+    "description": "전남권 과학특화",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 85,
+    "difficulty": 2
+  },
+  {
+    "id": "jb-sh",
+    "name": "전북과학고등학교",
+    "type": "과학고",
+    "location": "전북",
+    "studentCount": "180명",
+    "history": "1993년 개교",
+    "description": "전북권 과학영재 육성",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 85,
+    "difficulty": 2
+  },
+  {
+    "id": "gb-sh",
+    "name": "경북과학고등학교",
+    "type": "과학고",
+    "location": "경북",
+    "studentCount": "240명",
+    "history": "1988년 개교",
+    "description": "경북권 과학특화",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 86,
+    "difficulty": 2
+  },
+  {
+    "id": "gn-sh",
+    "name": "경남과학고등학교",
+    "type": "과학고",
+    "location": "경남",
+    "studentCount": "240명",
+    "history": "1984년 개교",
+    "description": "경남권 과학중점",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 86,
+    "difficulty": 2
+  },
+  {
+    "id": "jeju-sh",
+    "name": "제주과학고등학교",
+    "type": "과학고",
+    "location": "제주",
+    "studentCount": "120명",
+    "history": "2008년 개교",
+    "description": "제주권 과학인재 육성",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 84,
+    "difficulty": 2
+  },
+  {
+    "id": "incheon-sh",
+    "name": "인천과학고등학교",
+    "type": "과학고",
+    "location": "인천",
+    "studentCount": "240명",
+    "history": "1994년 개교",
+    "description": "인천 지역 과학특화",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 87,
+    "difficulty": 2
+  },
+  {
+    "id": "changwon-sh",
+    "name": "창원과학고등학교",
+    "type": "과학고",
+    "location": "경남",
+    "studentCount": "240명",
+    "history": "2005년 개교",
+    "description": "경남 창원 지역 과학고",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 86,
+    "difficulty": 2
+  },
+  {
+    "id": "dg1-sh",
+    "name": "대구일과학고등학교",
+    "type": "과학고",
+    "location": "대구",
+    "studentCount": "240명",
+    "history": "2011년 개교",
+    "description": "대구 지역 과학특화 고교",
+    "subjectWeights": {
+      "korean": 1,
+      "math": 3,
+      "english": 1,
+      "science": 3,
+      "social": 0.5
+    },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 88,
+    "difficulty": 2
+  }
+]
