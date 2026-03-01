@@ -28,7 +28,18 @@ export function semesterWeightedAvg(
   user.semesters.forEach((sem, idx) => {
     const w = effectiveWeights[idx] ?? 0;
     subjects.forEach((sub) => {
-      sums[sub] += (sem[sub] ?? 0) * w;
+      let score = sem[sub] ?? 0;
+      // 2026 입시 트렌드 반영
+      if (sub === 'math' || sub === 'science') {
+        if (score >= 90) score += 2; // 수학/과학 90점 이상 가산점
+      }
+      if (sub === 'korean' || sub === 'social') {
+        if (score < 70) score -= 2; // 국어/사회 70점 미만 감점
+      }
+      if (sub === 'english') {
+        if (score >= 80) score = 90; // 영어 80점 이상은 모두 90점 처리(차등 최소화)
+      }
+      sums[sub] += score * w;
     });
   });
 
@@ -83,22 +94,29 @@ export function probabilityFromScore(
   spread?: number
 ) {
   if (cutline == null) {
-    if (finalScore >= 95) return 0.98;
-    if (finalScore >= 90) return 0.9;
-    if (finalScore >= 80) return 0.75;
+    if (finalScore >= 95) return 0.99;
+    if (finalScore >= 90) return 0.95;
+    if (finalScore >= 85) return 0.85;
+    if (finalScore >= 80) return 0.7;
     if (finalScore >= 70) return 0.5;
-    if (finalScore >= 60) return 0.25;
-    return 0.05;
+    if (finalScore >= 60) return 0.3;
+    return 0.1;
   }
-  const s = typeof spread === 'number' && spread > 0 ? spread : 6;
-  return clamp(Number(sigmoid((finalScore - cutline) / s).toFixed(4)), 0, 1);
+  const s = typeof spread === 'number' && spread > 0 ? spread : 4;
+  return clamp(
+    Number(sigmoid((finalScore - cutline + 2) / s).toFixed(4)),
+    0,
+    1
+  );
 }
 
-export function levelFromProbability(p: number | null) {
-  if (p == null) return '미정';
-  if (p >= 0.75) return '적정';
-  if (p >= 0.4) return '경쟁';
-  return '힘듦';
+// New: Use finalScore max 18.7 as scale for level
+export function levelFromFinalScore(finalScore: number | null) {
+  if (finalScore == null) return '미정';
+  if (finalScore >= 15) return '적정';
+  if (finalScore >= 10) return '경쟁';
+  if (finalScore >= 0) return '힘듦';
+  return '미정';
 }
 
 export function calculateForSchool(
@@ -117,15 +135,17 @@ export function calculateForSchool(
   const afterDifficulty = applyDifficulty(normalized, school.difficulty, mode);
   const s =
     typeof school.spread === 'number' && school.spread > 0 ? school.spread : 6;
-  const prob =
+  let prob =
     school.cutline != null
       ? probabilityFromScore(afterDifficulty, school.cutline, s)
       : probabilityFromScore(afterDifficulty);
+  if (typeof prob !== 'number' || isNaN(prob)) prob = 0;
+  const finalScore = Math.round(afterDifficulty * 10) / 10;
   return {
     schoolId: school.id,
-    finalScore: Math.round(afterDifficulty * 10) / 10,
+    finalScore,
     probability: prob,
-    level: levelFromProbability(prob),
+    level: levelFromFinalScore(finalScore),
   };
 }
 

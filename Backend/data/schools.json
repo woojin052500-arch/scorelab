@@ -8,15 +8,15 @@
     "history": "1991년 개교",
     "description": "KAIST 부설 전국 단위 선발 영재학교",
     "subjectWeights": {
-      "korean": 0.5,
-      "math": 3,
+      "korean": 0.3,
+      "math": 3.5,
       "english": 1,
-      "science": 3,
-      "social": 0.3
+      "science": 3.5,
+      "social": 0.2
     },
     "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
-    "cutline": 94,
-    "difficulty": 3
+    "cutline": 91,
+    "difficulty": 1
   },
   {
     "id": "sshs",
@@ -27,15 +27,15 @@
     "history": "1989년 개교",
     "description": "국내 최상위 이공계 영재학교",
     "subjectWeights": {
-      "korean": 0.7,
-      "math": 3,
+      "korean": 0.3,
+      "math": 3.5,
       "english": 1,
-      "science": 3,
-      "social": 0.5
+      "science": 3.5,
+      "social": 0.2
     },
     "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
-    "cutline": 93,
-    "difficulty": 3
+    "cutline": 90,
+    "difficulty": 1
   },
   {
     "id": "dgsh",
@@ -53,8 +53,8 @@
       "social": 0.3
     },
     "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
-    "cutline": 92,
-    "difficulty": 3
+    "cutline": 89,
+    "difficulty": 1
   },
   {
     "id": "ggsh",
@@ -72,8 +72,8 @@
       "social": 0.3
     },
     "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
-    "cutline": 92,
-    "difficulty": 3
+    "cutline": 89,
+    "difficulty": 1
   },
   {
     "id": "djsh",
@@ -91,8 +91,8 @@
       "social": 0.3
     },
     "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
-    "cutline": 91,
-    "difficulty": 3
+    "cutline": 88,
+    "difficulty": 1
   },
   {
     "id": "gjsh",
@@ -110,8 +110,8 @@
       "social": 0.3
     },
     "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
-    "cutline": 90,
-    "difficulty": 3
+    "cutline": 87,
+    "difficulty": 1
   },
   {
     "id": "ince-gifted",
@@ -129,8 +129,8 @@
       "social": 0.5
     },
     "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
-    "cutline": 90,
-    "difficulty": 3
+    "cutline": 87,
+    "difficulty": 1
   },
   {
     "id": "hsh",
@@ -141,10 +141,10 @@
     "history": "1992년 개교",
     "description": "서울 지역 과학중점 교육",
     "subjectWeights": {
-      "korean": 1,
-      "math": 3,
+      "korean": 0.5,
+      "math": 3.2,
       "english": 1,
-      "science": 3,
+      "science": 3.2,
       "social": 0.5
     },
     "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },

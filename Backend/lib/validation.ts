@@ -12,6 +12,7 @@ export const UserScoreSchema = z.object({
   semesters: z.array(SemesterScoreSchema).min(1).max(12),
 });
 
+export const CalculateRequestSchema = z.object({
   userScore: UserScoreSchema,
   save: z.boolean().optional(),
   consent: z.boolean().optional(),
