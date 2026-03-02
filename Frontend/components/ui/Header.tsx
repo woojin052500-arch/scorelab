@@ -14,16 +14,17 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-200 dark:border-neutral-800">
+    <header className="sticky top-0 z-50 bg-white/70 dark:bg-neutral-950/70 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800">
       <div className="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
 
         {/* Brand */}
-        <Link href="/" className="text-xs tracking-[0.35em] uppercase text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white transition">
-          scorelab
+        <Link href="/" className="flex items-center gap-3">
+          <img src="/logo.svg" alt="ScoreLab" className="w-9 h-9 rounded-md object-cover" />
+          <span className="text-xs tracking-widest uppercase font-mono text-[var(--brand)] dark:text-[var(--brand-light)] hover:opacity-90 transition">scorelab</span>
         </Link>
 
         {/* Right Navigation */}
-        <nav className="flex items-center gap-12 text-sm font-medium">
+        <nav className="flex items-center gap-8 text-sm font-medium">
           {nav.map((item) => {
             const active = pathname === item.href;
             return (
@@ -32,8 +33,8 @@ export function Header() {
                 href={item.href}
                 className={`relative pb-1 transition ${
                   active
-                    ? "text-neutral-900 dark:text-neutral-900"
-                    : "text-neutral-600 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
+                    ? "text-cyan-600 dark:text-cyan-400 font-semibold"
+                    : "text-neutral-600 hover:text-cyan-500 dark:text-neutral-400 dark:hover:text-cyan-400"
                 }`}
               >
                 {item.name}

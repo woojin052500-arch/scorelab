@@ -3,37 +3,39 @@ import { School, UserScore, CalculationResult } from '../types/index';
 
 const SUBJECTS = ['korean', 'math', 'english', 'science', 'social'] as const;
 
-export function semesterWeightedAvg(user: UserScore, semesterWeights: number[] = []) { 
-  // 🔴 수정 1: sums는 배열([])이 아니라 객체({})여야 합니다.
-  const sums: Record<string, number> = {}; 
-  
-  SUBJECTS.forEach((s) => (sums[s] = 0));
-  let totalWeight = 0;
+function clamp(value: number, min = 0, max = 100) {
+  return Math.max(min, Math.min(max, value));
+}
 
-  semesterWeights.forEach((w, i) => {
-    const semester = user.semesters[i];
-    if (semester) {
-      SUBJECTS.forEach((sub) => {
-        let score = (semester as any)[sub] ?? 0;
-        // 2026 입시 가산점 로직
-        if (sub === 'math' || sub === 'science') if (score >= 90) score += 2;
-        if (sub === 'korean' || sub === 'social') if (score < 70) score -= 2;
-        if (sub === 'english') if (score >= 80) score = 90;
-        sums[sub] += score * w;
-      });
-      totalWeight += w;
-    }
+export function semesterWeightedAvg(user: UserScore, semesterWeights: number[] = []) {
+  const sums: Record<string, number> = {};
+  SUBJECTS.forEach((s) => (sums[s] = 0));
+
+  const n = Math.max(1, user.semesters.length);
+  let totalWeight = 0;
+  const effectiveWeights: number[] = [];
+  if (!semesterWeights || semesterWeights.length === 0) {
+    for (let i = 0; i < n; i++) { effectiveWeights.push(1); totalWeight += 1; }
+  } else {
+    for (let i = 0; i < n; i++) { const w = semesterWeights[i] ?? 0; effectiveWeights.push(w); totalWeight += w; }
+  }
+
+  user.semesters.forEach((semester, idx) => {
+    const w = effectiveWeights[idx] ?? 0;
+    SUBJECTS.forEach((sub) => {
+      let score = (semester as any)[sub] ?? 0;
+      if ((sub === 'math' || sub === 'science') && score >= 90) score = clamp(score + 1.5);
+      if ((sub === 'korean' || sub === 'social') && score < 70) score = clamp(score - 1.5);
+      if (sub === 'english' && score >= 85) score = Math.min(score, 95);
+      sums[sub] += score * w;
+    });
   });
 
   const out: Record<string, number> = {};
-  SUBJECTS.forEach((s) => { 
-    // 🔴 수정 2: sums[sub]가 아니라 변수 s를 써서 sums[s]라고 해야 합니다.
-    out[s] = totalWeight > 0 ? sums[s] / totalWeight : 0; 
-  });
+  SUBJECTS.forEach((s) => { out[s] = totalWeight > 0 ? sums[s] / totalWeight : 0; });
   return out;
 }
 
-<<<<<<< HEAD
 export function weightedSubjectSum(
   subjectAvg: Record<string, number>,
   subjectWeights: Record<string, number>
@@ -42,7 +44,6 @@ export function weightedSubjectSum(
   let weightSum = 0;
   for (const k of Object.keys(subjectWeights)) {
     const w = subjectWeights[k] ?? 0;
-    // @ts-ignore
     const s = subjectAvg[k] ?? 0;
     sum += s * w;
     weightSum += w;
@@ -52,8 +53,8 @@ export function weightedSubjectSum(
 
 export function normalizeTo100(weightedSum: number, weightSum: number) {
   if (weightSum <= 0) return 0;
-  const maxWeighted = 100 * weightSum;
-  return (weightedSum / maxWeighted) * 100;
+  // subject averages are in 0..100, so weightedSum/weightSum yields 0..100
+  return weightedSum / weightSum;
 }
 
 export function applyDifficulty(
@@ -63,7 +64,6 @@ export function applyDifficulty(
 ) {
   if (difficulty == null) return clamp(score);
   if (mode === 'add') return clamp(score + difficulty);
-
   return clamp(score * difficulty);
 }
 
@@ -86,25 +86,16 @@ export function probabilityFromScore(
     return 0.1;
   }
   const s = typeof spread === 'number' && spread > 0 ? spread : 4;
-  return clamp(
-    Number(sigmoid((finalScore - cutline + 2) / s).toFixed(4)),
-    0,
-    1
-  );
+  return clamp(Number(sigmoid((finalScore - cutline) / s).toFixed(4)), 0, 1);
 }
 
-// New: Use finalScore max 18.7 as scale for level
-// Modern admissions trend: classify by probability using cutline/difficulty
-// 적정: 합격확률 >= 0.7, 경쟁: 0.4 <= 확률 < 0.7, 힘듦: 확률 < 0.4
 export function levelFromFinalScore(finalScore: number | null, cutline?: number, difficulty?: number, spread?: number) {
   if (finalScore == null) return '미정';
-  // Use probabilityFromScore to reflect cutline/difficulty
   const s = typeof spread === 'number' && spread > 0 ? spread : 6;
   const prob = probabilityFromScore(finalScore, cutline, s);
   if (prob >= 0.7) return '적정';
   if (prob >= 0.4) return '경쟁';
-  if (prob >= 0) return '힘듦';
-  return '미정';
+  return '힘듦';
 }
 
 export function calculateForSchool(
@@ -121,8 +112,7 @@ export function calculateForSchool(
   const normalized = normalizeTo100(weightedSum, weightSum);
   const mode = options?.difficultyMode ?? school.difficultyMode ?? 'add';
   const afterDifficulty = applyDifficulty(normalized, school.difficulty, mode);
-  const s =
-    typeof school.spread === 'number' && school.spread > 0 ? school.spread : 6;
+  const s = typeof school.spread === 'number' && school.spread > 0 ? school.spread : 6;
   let prob =
     school.cutline != null
       ? probabilityFromScore(afterDifficulty, school.cutline, s)
@@ -134,21 +124,11 @@ export function calculateForSchool(
     finalScore,
     probability: prob,
     level: levelFromFinalScore(finalScore, school.cutline, school.difficulty, s),
-=======
-export function calculateForSchool(school: School, user: UserScore, options?: any): CalculationResult {
-  const semesterWeights = school.gradeWeights?.semesterWeights ?? [];
-  const subjectAvg = semesterWeightedAvg(user, semesterWeights);
-  
-  // 기본 계산 로직 (임시)
-  const finalScoreResult = 0; 
-  
-  return { 
-    schoolId: school.id, 
-    finalScore: finalScoreResult, 
-    probability: 0.5, 
-    level: '적정' 
->>>>>>> 20c801622e4bf71c4c5c35eb93b0d66e87570cc9
   };
 }
 
-export default { calculateForSchool };
+export function calculateAll(schools: School[], user: UserScore) {
+  return schools.map((s) => calculateForSchool(s, user)).sort((a, b) => b.finalScore - a.finalScore);
+}
+
+export default { calculateForSchool, calculateAll };

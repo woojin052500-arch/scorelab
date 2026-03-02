@@ -28,9 +28,9 @@ export function SchoolCard({ school }: Props) {
 
   return (
     <Link href={`/schools/${school.id}`} className="block group">
-      <div className="rounded-2xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 shadow-md p-6 hover:shadow-xl hover:border-blue-300 dark:hover:border-cyan-400 transition-all h-full">
+      <div className="rounded-2xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 shadow-md p-6 hover:shadow-xl transition-all h-full" style={{ borderColor: 'rgba(87,102,168,0.12)' }}>
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-xs font-bold text-blue-600 dark:text-cyan-400 bg-blue-50 dark:bg-neutral-800 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-bold bg-[color:var(--brand-light)]/20 px-2 py-0.5 rounded-full" style={{ color: 'var(--brand)', backgroundColor: 'rgba(158,167,230,0.12)' }}>
             {school.type}
           </span>
           <span className="text-xs text-gray-400 dark:text-neutral-400">{school.location}</span>
@@ -44,7 +44,7 @@ export function SchoolCard({ school }: Props) {
           <div className="line-clamp-2">{description}</div>
         </div>
         <div className="flex justify-end mt-3">
-          <span className="text-xs text-blue-400 dark:text-cyan-400 group-hover:text-blue-700 dark:group-hover:text-white flex items-center gap-1 font-semibold">
+          <span className="text-xs flex items-center gap-1 font-semibold" style={{ color: 'var(--brand-light)' }}>
             자세히 보기 <span aria-hidden>→</span>
           </span>
         </div>

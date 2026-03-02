@@ -1,10 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+	--accent: theme(colors.cyan.500, #06b6d4);
+	--brand: #5766A8;
+	--brand-light: #9EA7E6;
+	--brand-contrast: #ffffff;
+	--brand-gradient: linear-gradient(90deg, var(--brand), var(--brand-light));
+}
+
 html, body {
 	@apply bg-white text-neutral-900;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+	/* subtle tech grid */
+	background-image: linear-gradient(180deg, rgba(2,6,23,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(2,6,23,0.02) 1px, transparent 1px);
+	background-size: 100% 36px, 36px 100%;
 }
 
 .dark html, .dark body {
 	@apply bg-neutral-950 text-neutral-100;
 }
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+/* small utilities to emphasize a tech look */
+.tech-glow {
+	box-shadow: 0 6px 18px rgba(6,182,212,0.08);
+}
+
+.mono-number { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; }

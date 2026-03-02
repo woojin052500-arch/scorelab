@@ -21,9 +21,9 @@ const SUBJECT_LABELS: { key: keyof SemesterScores; label: string }[] = [
 
 export function ScoreInput({ semesterIndex, semester, onUpdate, getFieldError, onRemove, canRemove }: Props) {
   return (
-    <div className="border border-gray-200 rounded-xl p-5 bg-white">
+    <div className="rounded-xl p-5 bg-white/60 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 backdrop-blur-sm tech-glow">
       <div className="flex items-center justify-between mb-4">
-        <span className="text-sm font-semibold text-gray-700">{semesterIndex + 1}학기</span>
+        <span className="text-sm font-semibold text-neutral-800 dark:text-neutral-200 font-mono">{semesterIndex + 1}학기</span>
         {canRemove && (
           <button type="button" onClick={onRemove} className="text-xs text-red-400 hover:text-red-600 transition-colors">
             삭제
@@ -36,17 +36,17 @@ export function ScoreInput({ semesterIndex, semester, onUpdate, getFieldError, o
           const error = getFieldError(fieldKey);
           return (
             <div key={key} className="flex flex-col gap-1">
-              <label className="text-xs text-gray-500 font-medium text-center">{label}</label>
+              <label className="text-xs text-neutral-500 font-medium text-center">{label}</label>
               <input
                 type="number"
                 min={0}
                 max={100}
                 value={semester[key]}
                 onChange={(e) => onUpdate(semesterIndex, key, e.target.value)}
-                className={`w-full text-center border rounded-lg py-2 text-sm font-semibold outline-none transition-all
+                className={`w-full text-center border rounded-lg py-2 text-sm font-semibold outline-none transition-all mono-number
                   ${error
-                    ? "border-red-300 bg-red-50 focus:border-red-400"
-                    : "border-gray-200 bg-gray-50 focus:border-indigo-400 focus:bg-white"
+                    ? "border-red-400 bg-red-50/40 focus:border-red-400"
+                    : "border-neutral-300 bg-neutral-50/50 focus:border-cyan-400 focus:bg-white/60"
                   }`}
               />
               {error && <span className="text-xs text-red-500 text-center leading-tight">{error}</span>}

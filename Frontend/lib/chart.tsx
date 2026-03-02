@@ -23,14 +23,13 @@ export function PieChart({ labels, data, colors, width = 320, height = 320 }: Pi
         datasets: [
           {
             data,
-            backgroundColor:
-              colors || [
-                "#6366f1",
-                "#f59e42",
-                "#10b981",
-                "#f43f5e",
-                "#a78bfa",
-              ],
+            backgroundColor: colors || [
+              '#10B981', // 안정
+              '#06B6D4', // 적정
+              '#F59E0B', // 경쟁/상향
+              '#EF4444', // 힘듦
+              '#5766A8', // brand
+            ],
           },
         ],
       },

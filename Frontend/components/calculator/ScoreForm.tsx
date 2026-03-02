@@ -21,11 +21,11 @@ export function ScoreForm({ onSubmit, isLoading }: Props) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold text-gray-800">성적 입력</h2>
+        <h2 className="text-base font-semibold text-neutral-800 font-mono">성적 입력</h2>
         <button
           type="button"
           onClick={fillExample}
-          className="text-xs text-indigo-600 hover:text-indigo-800 underline underline-offset-2 transition-colors"
+          className="text-xs text-cyan-500 hover:text-cyan-400 underline underline-offset-2 transition-colors"
         >
           예시 데이터 채우기
         </button>
@@ -49,7 +49,7 @@ export function ScoreForm({ onSubmit, isLoading }: Props) {
         <button
           type="button"
           onClick={addSemester}
-          className="w-full border border-dashed border-gray-300 rounded-xl py-3 text-sm text-gray-500 hover:border-indigo-300 hover:text-indigo-500 transition-colors"
+          className="w-full border border-dashed border-neutral-700/20 rounded-xl py-3 text-sm text-neutral-400 hover:border-cyan-400 hover:text-cyan-400 transition-colors"
         >
           + 학기 추가 ({semesterCount}/4)
         </button>
@@ -59,7 +59,8 @@ export function ScoreForm({ onSubmit, isLoading }: Props) {
         type="button"
         onClick={handleSubmit}
         disabled={isLoading}
-        className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold rounded-xl py-3.5 text-sm transition-colors"
+        className="w-full text-white font-semibold rounded-xl py-3.5 text-sm transition-all mono-number"
+        style={{ background: 'var(--brand-gradient)', opacity: isLoading ? 0.6 : 1 }}
       >
         {isLoading ? "계산 중..." : "합격 가능성 분석하기"}
       </button>

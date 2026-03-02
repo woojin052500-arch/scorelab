@@ -12,6 +12,14 @@ export type BarChartProps = {
   height?: number;
 };
 
+const DEFAULT_LEVEL_COLORS = [
+  "#10B981", // 안정 - green
+  "#06B6D4", // 적정 - cyan
+  "#F59E0B", // 경쟁/상향 - amber
+  "#EF4444", // 힘듦 - red
+  "#5766A8", // brand purple/blue
+];
+
 export function BarChart({ labels, data, colors, width = 320, height = 240 }: BarChartProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
@@ -23,14 +31,7 @@ export function BarChart({ labels, data, colors, width = 320, height = 240 }: Ba
         datasets: [
           {
             data,
-            backgroundColor:
-              colors || [
-                "#6366f1",
-                "#f59e42",
-                "#10b981",
-                "#f43f5e",
-                "#a78bfa",
-              ],
+            backgroundColor: colors || DEFAULT_LEVEL_COLORS,
             borderRadius: 8,
             barPercentage: 0.6,
             categoryPercentage: 0.7,

@@ -9,15 +9,28 @@ export const LEVEL_CONFIG: Record<string, LevelConfig> = {
   },
   적정: {
     label: "적정",
-    color: "text-blue-700",
-    bg: "bg-blue-50",
-    border: "border-blue-200",
+    color: "text-cyan-600",
+    bg: "bg-cyan-50",
+    border: "border-cyan-200",
   },
   상향: {
+    label: "상향",
     label: "상향",
     color: "text-amber-700",
     bg: "bg-amber-50",
     border: "border-amber-200",
+  },
+  경쟁: {
+    label: "경쟁",
+    color: "text-amber-700",
+    bg: "bg-amber-50",
+    border: "border-amber-200",
+  },
+  힘듦: {
+    label: "힘듦",
+    color: "text-red-700",
+    bg: "bg-red-50",
+    border: "border-red-200",
   },
 };
 
