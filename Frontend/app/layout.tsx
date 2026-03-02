@@ -8,9 +8,10 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Remove static class from <body>, let ThemeToggle manage theme classes
   return (
-    <html lang="ko">
-      <body className="bg-gray-50 text-gray-900 antialiased min-h-screen">
+    <html lang="ko" suppressHydrationWarning>
+      <body className="antialiased min-h-screen transition-colors duration-300">
         <Header />
         {children}
       </body>

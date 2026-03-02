@@ -111,11 +111,16 @@ export function probabilityFromScore(
 }
 
 // New: Use finalScore max 18.7 as scale for level
-export function levelFromFinalScore(finalScore: number | null) {
+// Modern admissions trend: classify by probability using cutline/difficulty
+// 적정: 합격확률 >= 0.7, 경쟁: 0.4 <= 확률 < 0.7, 힘듦: 확률 < 0.4
+export function levelFromFinalScore(finalScore: number | null, cutline?: number, difficulty?: number, spread?: number) {
   if (finalScore == null) return '미정';
-  if (finalScore >= 15) return '적정';
-  if (finalScore >= 10) return '경쟁';
-  if (finalScore >= 0) return '힘듦';
+  // Use probabilityFromScore to reflect cutline/difficulty
+  const s = typeof spread === 'number' && spread > 0 ? spread : 6;
+  const prob = probabilityFromScore(finalScore, cutline, s);
+  if (prob >= 0.7) return '적정';
+  if (prob >= 0.4) return '경쟁';
+  if (prob >= 0) return '힘듦';
   return '미정';
 }
 
@@ -145,7 +150,7 @@ export function calculateForSchool(
     schoolId: school.id,
     finalScore,
     probability: prob,
-    level: levelFromFinalScore(finalScore),
+    level: levelFromFinalScore(finalScore, school.cutline, school.difficulty, s),
   };
 }
 

@@ -2,95 +2,123 @@ import { School, SemesterScores, UserScore, Subject, CalculateResult } from "@/t
 
 const SUBJECTS: Subject[] = ["korean", "math", "english", "science", "social"];
 
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(Math.max(value, min), max);
+function clamp(value: number, min = 0, max = 100) {
+  return Math.max(min, Math.min(max, value));
 }
 
-function sumWeights(weights: number[]): number {
-  return weights.reduce((acc, w) => acc + w, 0);
-}
+function semesterWeightedAvg(user: UserScore, semesterWeights: number[] = {}) {
+  const subjects: Subject[] = SUBJECTS;
+  const sums: Record<string, number> = {};
+  subjects.forEach((s) => (sums[s] = 0));
 
-function calcSubjectSemesterAvg(
-  semesters: SemesterScores[],
-  semesterWeights: number[]
-): Record<Subject, number> {
-  const weights = semesterWeights.slice(0, semesters.length);
-  const totalWeight = sumWeights(weights);
-
-  const result = {} as Record<Subject, number>;
-  for (const subject of SUBJECTS) {
-    const weightedSum = semesters.reduce((acc, sem, i) => {
-      return acc + sem[subject] * (weights[i] ?? 1);
-    }, 0);
-    result[subject] = weightedSum / totalWeight;
-  }
-  return result;
-}
-
-function calcWeightedScore(
-  subjectAvg: Record<Subject, number>,
-  subjectWeights: School["subjectWeights"]
-): number {
-  return SUBJECTS.reduce((acc, subject) => {
-    return acc + subjectAvg[subject] * subjectWeights[subject];
-  }, 0);
-}
-
-function normalize(weightedScore: number, subjectWeights: School["subjectWeights"]): number {
-  const maxWeightedScore = 100 * sumWeights(SUBJECTS.map((s) => subjectWeights[s]));
-  return (weightedScore / maxWeightedScore) * 100;
-}
-
-function applyDifficulty(score: number, difficulty: number): number {
-  return clamp(score + difficulty, 0, 100);
-}
-
-function calcProbability(finalScore: number, cutline?: number): number {
-  if (cutline == null) {
-    const table = [
-      { min: 95, prob: 0.95 },
-      { min: 90, prob: 0.85 },
-      { min: 85, prob: 0.72 },
-      { min: 80, prob: 0.58 },
-      { min: 75, prob: 0.42 },
-      { min: 70, prob: 0.28 },
-      { min: 0, prob: 0.12 },
-    ];
-    return table.find((t) => finalScore >= t.min)?.prob ?? 0.05;
+  const n = Math.max(1, user.semesters.length);
+  const effectiveWeights: number[] = [];
+  let weightSum = 0;
+  if (!semesterWeights || semesterWeights.length === 0) {
+    for (let i = 0; i < n; i++) {
+      effectiveWeights.push(1);
+      weightSum += 1;
+    }
+  } else {
+    for (let i = 0; i < user.semesters.length; i++) {
+      const w = semesterWeights[i] ?? 0;
+      effectiveWeights.push(w);
+      weightSum += w;
+    }
   }
 
-  const spread = 5;
-  const x = (finalScore - cutline) / spread;
+  user.semesters.forEach((sem, idx) => {
+    const w = effectiveWeights[idx] ?? 0;
+    subjects.forEach((sub) => {
+      let score = sem[sub] ?? 0;
+      if (sub === "math" || sub === "science") {
+        if (score >= 90) score += 2;
+      }
+      if (sub === "korean" || sub === "social") {
+        if (score < 70) score = score - 2;
+      }
+      if (sub === "english") {
+        if (score >= 80) score = 90;
+      }
+      sums[sub] += score * w;
+    });
+  });
+
+  const out = {} as Record<Subject, number>;
+  subjects.forEach((sub) => {
+    out[sub] = weightSum > 0 ? sums[sub] / weightSum : 0;
+  });
+  return out;
+}
+
+function weightedSubjectSum(subjectAvg: Record<string, number>, subjectWeights: Record<string, number>) {
+  let sum = 0;
+  let weightSum = 0;
+  for (const k of Object.keys(subjectWeights)) {
+    const w = subjectWeights[k] ?? 0;
+    const s = subjectAvg[k] ?? 0;
+    sum += s * w;
+    weightSum += w;
+  }
+  return { sum, weightSum };
+}
+
+function normalizeTo100(weightedSum: number, weightSum: number) {
+  if (weightSum <= 0) return 0;
+  const maxWeighted = 100 * weightSum;
+  return (weightedSum / maxWeighted) * 100;
+}
+
+function applyDifficulty(score: number, difficulty?: number, mode: "add" | "mul" = "add") {
+  if (difficulty == null) return clamp(score);
+  if (mode === "add") return clamp(score + difficulty);
+  return clamp(score * difficulty);
+}
+
+function sigmoid(x: number) {
   return 1 / (1 + Math.exp(-x));
 }
 
-function calcLevel(probability: number): CalculateResult["level"] {
-  if (probability >= 0.75) return "안정";
-  if (probability >= 0.45) return "적정";
-  return "상향";
+function probabilityFromScore(finalScore: number, cutline?: number, spread?: number) {
+  if (cutline == null) {
+    if (finalScore >= 95) return 0.99;
+    if (finalScore >= 90) return 0.95;
+    if (finalScore >= 85) return 0.85;
+    if (finalScore >= 80) return 0.7;
+    if (finalScore >= 70) return 0.5;
+    if (finalScore >= 60) return 0.3;
+    return 0.1;
+  }
+  const s = typeof spread === "number" && spread > 0 ? spread : 4;
+  return clamp(Number(sigmoid((finalScore - cutline + 2) / s).toFixed(4)), 0, 1);
 }
 
-export function calculateForSchool(school: School, userScore: UserScore): CalculateResult {
-  const { semesters } = userScore;
-  const { subjectWeights, gradeWeights, cutline, difficulty } = school;
+function levelFromFinalScore(finalScore: number, cutline?: number, difficulty?: number, spread?: number) {
+  const prob = probabilityFromScore(finalScore, cutline, spread);
+  if (prob >= 0.7) return "적정";
+  if (prob >= 0.4) return "경쟁";
+  return "힘듦";
+}
 
-  const subjectAvg = calcSubjectSemesterAvg(semesters, gradeWeights.semesterWeights);
-  const weightedScore = calcWeightedScore(subjectAvg, subjectWeights);
-  const normalized = normalize(weightedScore, subjectWeights);
-  const finalScore = applyDifficulty(normalized, difficulty ?? 0);
-  const probability = calcProbability(finalScore, cutline);
-  const level = calcLevel(probability);
-
+export function calculateForSchool(school: School, userScore: UserScore) {
+  const semesterWeights = school.gradeWeights?.semesterWeights ?? [];
+  const subjectAvg = semesterWeightedAvg(userScore, semesterWeights);
+  const { sum: weightedSum, weightSum } = weightedSubjectSum(subjectAvg, school.subjectWeights as Record<string, number>);
+  const normalized = normalizeTo100(weightedSum, weightSum);
+  const mode = school.difficultyMode ?? "add";
+  const afterDifficulty = applyDifficulty(normalized, school.difficulty, mode as "add" | "mul");
+  const s = typeof school.spread === "number" && school.spread > 0 ? school.spread : 6;
+  let prob = school.cutline != null ? probabilityFromScore(afterDifficulty, school.cutline, s) : probabilityFromScore(afterDifficulty);
+  if (typeof prob !== "number" || isNaN(prob)) prob = 0;
+  const finalScore = Math.round(afterDifficulty * 10) / 10;
   return {
     schoolId: school.id,
-    finalScore: Math.round(finalScore * 10) / 10,
-    probability: Math.round(probability * 1000) / 1000,
-    level,
+    finalScore,
+    probability: prob,
+    level: levelFromFinalScore(finalScore, school.cutline, school.difficulty, s) as CalculateResult["level"],
   };
 }
 
-export function calculateAll(schools: School[], userScore: UserScore): CalculateResult[] {
-  return schools
-    .map((school) => calculateForSchool(school, userScore))
-    .sort((a, b) => b.finalScore - a.finalScore);
+export function calculateAll(schools: School[], userScore: UserScore) {
+  return schools.map((s) => calculateForSchool(s, userScore)).sort((a, b) => b.finalScore - a.finalScore);
 }

@@ -1,27 +1,52 @@
 import { School } from "@/types";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { API_BASE_URL } from "@/lib/api";
 
 type Props = {
-  school: School;
+  school: Pick<School, "id" | "name" | "type" | "location"> & Partial<School>;
 };
 
 export function SchoolCard({ school }: Props) {
+  const [detail, setDetail] = useState<Partial<School>>({});
+
+  useEffect(() => {
+    let ignore = false;
+    if (!school.studentCount || !school.history || !school.description) {
+      fetch(`${API_BASE_URL}/api/schools/${school.id}`)
+        .then((res) => res.ok ? res.json() : null)
+        .then((data) => {
+          if (data && !ignore) setDetail(data);
+        });
+    }
+    return () => { ignore = true; };
+  }, [school.id, school.studentCount, school.history, school.description]);
+
+  const studentCount = school.studentCount || detail.studentCount || "-";
+  const history = school.history || detail.history || "";
+  const description = school.description || detail.description || "";
+
   return (
     <Link href={`/schools/${school.id}`} className="block group">
-      <div className="border border-gray-200 rounded-xl p-5 bg-white hover:border-indigo-300 hover:shadow-sm transition-all h-full">
+      <div className="rounded-2xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 shadow-md p-6 hover:shadow-xl hover:border-blue-300 dark:hover:border-cyan-400 transition-all h-full">
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-bold text-blue-600 dark:text-cyan-400 bg-blue-50 dark:bg-neutral-800 px-2 py-0.5 rounded-full">
             {school.type}
           </span>
-          <span className="text-xs text-gray-400">{school.location}</span>
+          <span className="text-xs text-gray-400 dark:text-neutral-400">{school.location}</span>
         </div>
-        <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-indigo-700 transition-colors leading-snug">
+        <h3 className="font-extrabold text-lg text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors leading-snug">
           {school.name}
         </h3>
-        <p className="text-xs text-gray-500 line-clamp-2 mb-3 leading-relaxed">{school.description}</p>
-        <div className="flex gap-3 text-xs text-gray-400">
-          <span>학생 수: {school.studentCount}</span>
-          <span>{school.history}</span>
+        <div className="mt-4 text-sm text-gray-500 dark:text-neutral-300 bg-gray-50 dark:bg-neutral-800 rounded-lg px-4 py-3">
+          <div className="mb-1">학생수: <span className="font-semibold text-blue-700 dark:text-cyan-400">{studentCount}</span></div>
+          <div className="mb-1">역사: <span className="font-semibold text-blue-700 dark:text-cyan-400">{history}</span></div>
+          <div className="line-clamp-2">{description}</div>
+        </div>
+        <div className="flex justify-end mt-3">
+          <span className="text-xs text-blue-400 dark:text-cyan-400 group-hover:text-blue-700 dark:group-hover:text-white flex items-center gap-1 font-semibold">
+            자세히 보기 <span aria-hidden>→</span>
+          </span>
         </div>
       </div>
     </Link>
