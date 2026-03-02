@@ -436,5 +436,18 @@
     "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
     "cutline": 88,
     "difficulty": 2
+  },
+  {
+    "id": "dimigo",
+    "name": "한국디지털미디어고등학교",
+    "type": "특성화고",
+    "location": "경기",
+    "studentCount": "약 600명",
+    "history": "2002년 개교",
+    "description": "국내 최고 수준의 IT 특성화고",
+    "subjectWeights": { "korean": 1, "math": 1, "english": 1, "science": 1, "social": 1 },
+    "gradeWeights": { "semesterWeights": [1, 1, 2, 2] },
+    "cutline": 85,
+    "difficulty": 2
   }
 ]

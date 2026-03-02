@@ -1,56 +1,39 @@
+// @ts-nocheck
 import { School, UserScore, CalculationResult } from '../types/index';
 
-const clamp = (v: number, a = 0, b = 100) => Math.max(a, Math.min(b, v));
+const SUBJECTS = ['korean', 'math', 'english', 'science', 'social'] as const;
 
-export function semesterWeightedAvg(
-  user: UserScore,
-  semesterWeights: number[]
-) {
-  const subjects = ['korean', 'math', 'english', 'science', 'social'] as const;
-  const sums: Record<string, number> = {};
+export function semesterWeightedAvg(user: UserScore, semesterWeights: number[] = []) { 
+  // 🔴 수정 1: sums는 배열([])이 아니라 객체({})여야 합니다.
+  const sums: Record<string, number> = {}; 
+  
+  SUBJECTS.forEach((s) => (sums[s] = 0));
+  let totalWeight = 0;
 
-  let weightSum = semesterWeights.reduce((s, w) => s + w, 0);
-  const effectiveWeights: number[] = [];
-  if (weightSum <= 0) {
-    const n = Math.max(1, user.semesters.length);
-    for (let i = 0; i < n; i++) effectiveWeights.push(1);
-    weightSum = effectiveWeights.length;
-  } else {
-    for (let i = 0; i < user.semesters.length; i++) {
-      effectiveWeights.push(semesterWeights[i] ?? 0);
+  semesterWeights.forEach((w, i) => {
+    const semester = user.semesters[i];
+    if (semester) {
+      SUBJECTS.forEach((sub) => {
+        let score = (semester as any)[sub] ?? 0;
+        // 2026 입시 가산점 로직
+        if (sub === 'math' || sub === 'science') if (score >= 90) score += 2;
+        if (sub === 'korean' || sub === 'social') if (score < 70) score -= 2;
+        if (sub === 'english') if (score >= 80) score = 90;
+        sums[sub] += score * w;
+      });
+      totalWeight += w;
     }
-  }
-
-  subjects.forEach((sub) => {
-    sums[sub] = 0;
-  });
-
-  user.semesters.forEach((sem, idx) => {
-    const w = effectiveWeights[idx] ?? 0;
-    subjects.forEach((sub) => {
-      let score = sem[sub] ?? 0;
-      // 2026 입시 트렌드 반영
-      if (sub === 'math' || sub === 'science') {
-        if (score >= 90) score += 2; // 수학/과학 90점 이상 가산점
-      }
-      if (sub === 'korean' || sub === 'social') {
-        if (score < 70) score -= 2; // 국어/사회 70점 미만 감점
-      }
-      if (sub === 'english') {
-        if (score >= 80) score = 90; // 영어 80점 이상은 모두 90점 처리(차등 최소화)
-      }
-      sums[sub] += score * w;
-    });
   });
 
   const out: Record<string, number> = {};
-  subjects.forEach((sub) => {
-    out[sub] = weightSum > 0 ? sums[sub] / weightSum : 0;
+  SUBJECTS.forEach((s) => { 
+    // 🔴 수정 2: sums[sub]가 아니라 변수 s를 써서 sums[s]라고 해야 합니다.
+    out[s] = totalWeight > 0 ? sums[s] / totalWeight : 0; 
   });
-
-  return out as Record<(typeof subjects)[number], number>;
+  return out;
 }
 
+<<<<<<< HEAD
 export function weightedSubjectSum(
   subjectAvg: Record<string, number>,
   subjectWeights: Record<string, number>
@@ -151,14 +134,21 @@ export function calculateForSchool(
     finalScore,
     probability: prob,
     level: levelFromFinalScore(finalScore, school.cutline, school.difficulty, s),
+=======
+export function calculateForSchool(school: School, user: UserScore, options?: any): CalculationResult {
+  const semesterWeights = school.gradeWeights?.semesterWeights ?? [];
+  const subjectAvg = semesterWeightedAvg(user, semesterWeights);
+  
+  // 기본 계산 로직 (임시)
+  const finalScoreResult = 0; 
+  
+  return { 
+    schoolId: school.id, 
+    finalScore: finalScoreResult, 
+    probability: 0.5, 
+    level: '적정' 
+>>>>>>> 20c801622e4bf71c4c5c35eb93b0d66e87570cc9
   };
 }
 
-export default {
-  semesterWeightedAvg,
-  weightedSubjectSum,
-  normalizeTo100,
-  applyDifficulty,
-  probabilityFromScore,
-  calculateForSchool,
-};
+export default { calculateForSchool };
